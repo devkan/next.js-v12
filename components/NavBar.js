@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import styles from "../styles/NavBar.module.css";
 
 export default function NavBar(){
   const router = useRouter();
-  console.log(router);
 
   return (
-    <nav>
+    <nav className={styles.nav}>
       <Link legacyBehavior href="/">
-       <a style={{color: router.pathname === "/" ? "red": "blue"}}>Home</a>
+       <a className={`${styles.link} ${router.pathname === "/" ? styles.active : ""}`}>Home</a>
       </Link>
       {/*
       <nav>
@@ -19,7 +19,10 @@ export default function NavBar(){
       페이지 새로고침이 일어나게 된다. 그러면 기존 <LInk> 방식보다 더 느리게 작동을 한다.
       */}
       <Link legacyBehavior href="/about">
-        <a style={{color: router.pathname === "/about" ? "red": "blue"}}>About</a>
+        <a className={[
+          styles.link,
+          router.pathname === "/about" ? styles.active : ""
+        ].join(" ")}>About</a>
       </Link>
       {/*
       14.x에서는 이처럼 사용하지 않는다. 샘플용 코드임을 알아두자. 여기서는 12.x대의 코드로 사용하려고 이러는 것임.
