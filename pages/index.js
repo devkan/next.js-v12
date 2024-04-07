@@ -12,7 +12,7 @@ export default function Home() {
 		(async () => {
 			const { results } = await (
 				await fetch(
-					`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
+					"/api/movies"
 				)
 			).json();
 			// {results}를 response되는 데이타중 results 부분을 가져오기 위한 것이다. 즉, api리턴값이 있는 객채의 이름으로 임의로 지정한 것이 아니다.
