@@ -9,15 +9,7 @@ import { useRouter } from "next/router";
 export default function Home({ results }) {
 	const router = useRouter();
 	const onClick = (id, title) => {
-		router.push(
-			{
-				pathname: `/movies/${id}`,
-				query: {
-					title, // query를 사용하여 title을 넘겨준다. title: title 대신에 title로 축약해서 사용가능하다.
-				},
-			},
-			`movies/${id}`
-		); // router.push()를 사용하여 페이지 이동
+		router.push(`/movies/${title}/${id}`); // router.push()를 사용하여 페이지 이동
 	};
 
 	return (
@@ -32,15 +24,8 @@ export default function Home({ results }) {
 					<img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
 					<h4>
 						{movie.original_title}
-						<Link
-							legacyBehavior
-							href={{
-								pathname: `/movies/${movie.id}`,
-								query: { title: movie.original_title },
-							}}
-							as={`movies/${movie.id}`}
-						>
-							<a></a>
+						<Link legacyBehavior href={`/movies/${movie.original_title}/${movie.id}`}>
+							<a>{movie.original_title}</a>
 						</Link>
 					</h4>
 				</div>
