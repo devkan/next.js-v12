@@ -4,28 +4,12 @@
 import Seo from "@/components/Seo";
 import { useEffect, useState } from "react";
 
-const API_KEY = "17aac700a5086c5b3362043c1f6a81e1";
 
-export default function Home() {
-	const [movies, setMovies] = useState();
-	useEffect(() => {
-		(async () => {
-			const { results } = await (
-				await fetch(
-					"/api/movies"
-				)
-			).json();
-			// {results}를 response되는 데이타중 results 부분을 가져오기 위한 것이다. 즉, api리턴값이 있는 객채의 이름으로 임의로 지정한 것이 아니다.
-			//  (async () => {……})(); 에서 맨 뒤의 ()가 없으면 실행이 안된다. run() 함수의 ()처럼 있으면 실행이 된다는거
-			setMovies(results);
-		})();
-	}, []);
-
+export default function Home({results}) { // getServerSideProps의 props가 results라서 results로 받아야 한다.
 	return (
     <div className="container">
       <Seo title="Home" />
-      {!movies && <h4>Loading...</h4>}
-      {movies?.map((movie) => (
+      {results?.map((movie) => (
         <div className="movie" key={movie.id}>
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
           <h4>{movie.original_title}</h4>
@@ -37,6 +21,9 @@ export default function Home() {
           grid-template-columns: 1fr 1fr;
           padding: 20px;
           gap: 20px;
+        }
+        .movie{
+          cursor: pointer;
         }
         .movie img {
           max-width: 100%;
@@ -54,4 +41,14 @@ export default function Home() {
       `}</style>
     </div>
 	);
+}
+
+// getServerSideProps()는 서버사이드에서만 작동이 되며, 이 결과값이 page의 props로 전달된다.
+export async function getServerSideProps(){
+  const { results } = await (await fetch("http://localhost:3000/api/movies")).json();
+  return{
+    props:{
+      results // results로 props를 지정되면 Home()의 페이지에서도 result로 받아야 한다.
+    }
+  }
 }
